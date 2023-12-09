@@ -87,7 +87,7 @@ fn compute_inverse(e: u32, phi_n: u32) -> u32 {
     d
 }
 
-fn encrypt(message: String, public_key: [u128; 2]) -> Vec<BigUint> {
+fn encrypt(message: &String, public_key: [u128; 2]) -> Vec<BigUint> {
     /*
         * Encrypts a message using the public key
         * message is the message to encrypt
@@ -182,7 +182,7 @@ fn main() {
         message = message.trim().to_string();
 
         // Get encrypted text
-        let encrypted_text = encrypt(message, public_key);
+        let encrypted_text = encrypt(&message, public_key);
 
         // Print encrypted text (This is output as a vector of natural numbers)
         println!("Encrypted message: {:?}", encrypted_text);
@@ -192,5 +192,16 @@ fn main() {
 
         // Print decrypted text (Output should be the same as the original input string)
         println!("Decrypted message: {}", decrypted_text);
+
+        // Track percentage of characters that were encrypted and decrypted correctly
+        let mut num_correct: u32 = 0;
+        for (i, c) in message.chars().enumerate() {
+            if c == decrypted_text.chars().nth(i).unwrap() {
+                num_correct += 1;
+            }
+        }
+
+        println!("Percentage of characters encrypted and decrypted correctly: {}%",
+                 (num_correct as f32 / message.len() as f32) * 100.0);
     }
 }
